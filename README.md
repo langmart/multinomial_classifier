@@ -7,46 +7,42 @@ Usage:
 
 1.) Preprocessing the data
 
-    The loaded data is available in a structured-array format and has to be
-    converted into numpy arrays with the preprocessing script. This script is
-    invoked with the multi_get_branches.py file, where the following can be
-    specified:
+The loaded data is available in a structured-array format and has to be
+converted into numpy arrays with the preprocessing script. This script is
+invoked with the multi_get_branches.py file, where the following can be
+specified:
 
-    
-<<<<<<< HEAD
-    * The input paths for the training (Even) and validation (Odd) sets, each
-=======
-    *   The input paths for the training (Even) and validation (Odd) sets, each
->>>>>>> 9525baaf21f7a5934c4a63d01658ec6c39d1a34c
-        consisting of signal (ttH) and background (ttbarSL = ttbar semi-leptonic) 
-        events. 
 
-    *   The branchlists to be converted; expects a list of strings, each of them
-        describing a file containing the branches to be converted.
+* The input paths for the training (Even) and validation (Odd) sets, each
+    consisting of signal (ttH) and background (ttbarSL = ttbar semi-leptonic) 
+    events. 
 
-    *   The categories to be converted; expects a list os list of strings. Each
-        of the lists will be extracted. The code for the background events is: 
+*   The branchlists to be converted; expects a list of strings, each of them
+    describing a file containing the branches to be converted.
+
+*   The categories to be converted; expects a list os list of strings. Each
+    of the lists will be extracted. The code for the background events is: 
+        
+        *   '30':   tt + bb
+        *   '20':   tt + 2b
+        *   '10':   tt + b
+        *   '01':   tt + cc
+        *   '00':   tt + light flavor 
+
+    Signal events will always be converted.
+
+*   preselection: 
             
-            *   '30':   tt + bb
-            *   '20':   tt + 2b
-            *   '10':   tt + b
-            *   '01':   tt + cc
-            *   '00':   tt + light flavor 
+        *   'no':       no preselection
+        *   'weak':     >= 6 jets, >=3 btags (medium)
+        *   'strong':   >= 6 jets, >=4 btags (medium)
 
-        Signal events will always be converted.
-
-    *   preselection: 
-                
-            *   'no':       no preselection
-            *   'weak':     >= 6 jets, >=3 btags (medium)
-            *   'strong':   >= 6 jets, >=4 btags (medium)
-
-    *   The output directory.
+*   The output directory.
 
 
-    The preprocessing utility also applies weights to the events and generates
-    one-hot labels with dimension 1 + num(categories).
-    
+The preprocessing utility also applies weights to the events and generates
+one-hot labels with dimension 1 + num(categories).
+
 
 
 
