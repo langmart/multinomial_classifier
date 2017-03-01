@@ -2,14 +2,13 @@
 import numpy as np
 import datetime
 from onehot_mlp import OneHotMLP
-from data_frame import DataFrame
+from DataFrame.data_frame import DataFrame
 
 
 trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01_light_weights1.npy'
 valpath='/storage/7/lang/nn_data/converted/odd_branches_corrected_30_20_10_01_light_weights1.npy'
 weight_path = '/storage/7/lang/nn_data/converted/weights.txt'
 branchlist='branchlists/branches_corrected_converted.txt'
-
 with open(weight_path, 'r') as f:
     weights = [line.strip() for line in f]
     sig_weight = np.float32(weights[0])
@@ -29,9 +28,10 @@ outsize = 6
 
 optname = 'Adam'
 optimizer_options = []
-beta = 1e-10
-N_EPOCHS = 1000
-learning_rate = 1e-2
+act_func = 'tanh'
+beta = 1e-5
+N_EPOCHS = 500
+learning_rate = 2e-3
 batch_size = 15000 
 hidden_layers = [200, 200, 200]
 keep_prob = 0.8
@@ -40,19 +40,23 @@ lrate_decay_options = [0.97, 200]
 batch_decay = 'no'
 batch_decay_options = []
 
+enable_early='yes'
+early_stop = 20
+
 # Be careful when editing the part below.
 train = DataFrame(train, out_size=outsize, normalization=normalization)
 val = DataFrame(val, out_size=outsize, normalization=normalization)
 
 cl = OneHotMLP(train.nfeatures, hidden_layers, outsize, model_location, 
         labels_text=labels, branchlist=branchlist, sig_weight=sig_weight,
-        bg_weight=bg_weight)
+        bg_weight=bg_weight, act_func=act_func)
 cl.train(train, val, optimizer=optname, epochs=N_EPOCHS, batch_size=batch_size, 
         learning_rate= learning_rate, keep_prob=keep_prob, beta=beta, 
         out_size=outsize, optimizer_options=optimizer_options, 
         decay_learning_rate=decay_learning_rate,
         dlrate_options=lrate_decay_options, batch_decay=batch_decay,
-        batch_decay_options=batch_decay_options)
+        batch_decay_options=batch_decay_options, enable_early=enable_early,
+        early_stop=early_stop)
 with open('{}/data_info.txt'.format(model_location), 'w') as out:
     out.write('Training data: {}\n'.format(trainpath))
     out.write('Validation data: {}\n'.format(valpath))

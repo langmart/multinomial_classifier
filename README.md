@@ -121,6 +121,12 @@ train_ttH.py file. Several parameters are to be set prior to launch:
 *   batch_decay_options: Sets the decay rate and step width for the batch
     size decay. The step_width is given in number of epochs.
 
+*   enable_early: Indicates whether to check for early stopping. Allowed values
+    are 'yes' and 'no'. Default is 'no'.
+
+*   early_stop: The number of epochs after which the quality must have improved,
+    otherwise early stopping is invoked.
+
 *   ttH_penalty: A penalty value for false positives and false negatives
     when using the ttH classifier. Not usable with train.py.
 

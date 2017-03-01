@@ -9,12 +9,12 @@ trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01
 valpath='/storage/7/lang/nn_data/converted/odd_branches_corrected_30_20_10_01_light_weights1.npy'
 weight_path = '/storage/7/lang/nn_data/converted/weights.txt'
 branchlist='branchlists/branches_corrected_converted.txt'
-exec_name = 'ttH_test'
 with open(weight_path, 'r') as f:
     weights = [line.strip() for line in f]
     sig_weight = np.float32(weights[0])
     bg_weight = np.float32(weights[1])
 outpath = 'data/executed/ttH/'
+exec_name = 'ttH_test'
 print('Loading data...')
 train = np.load(trainpath)
 val = np.load(valpath)
@@ -23,16 +23,18 @@ labels = ['ttH', 'tt+bb', 'tt+2b', 'tt+b', 'tt+cc', 'tt+light']
 model_location = outpath + exec_name
 
 # For information on some of the following options see below.
+normalization = 'gaussian'
+outsize = 6
+
 optname = 'Adam'
 optimizer_options = []
+act_func = 'tanh'
 beta = 1e-5
-outsize = 6
 N_EPOCHS = 500
 learning_rate = 2e-3
 batch_size = 15000 
 hidden_layers = [200, 200, 200]
 keep_prob = 0.8
-normalization = 'gaussian'
 decay_learning_rate = 'yes'
 lrate_decay_options = [0.97, 200]
 batch_decay = 'no'
@@ -47,7 +49,7 @@ val = DataFrame(val, out_size=outsize, normalization=normalization)
 
 cl = OneHotMLP(train.nfeatures, hidden_layers, outsize, model_location, 
         labels_text=labels, branchlist=branchlist, sig_weight=sig_weight,
-        bg_weight=bg_weight)
+        bg_weight=bg_weight, act_func=act_func)
 cl.train(train, val, optimizer=optname, epochs=N_EPOCHS, batch_size=batch_size, 
         learning_rate= learning_rate, keep_prob=keep_prob, beta=beta, 
         out_size=outsize, optimizer_options=optimizer_options, 
