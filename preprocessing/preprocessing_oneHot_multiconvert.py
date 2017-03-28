@@ -392,7 +392,7 @@ class GetBranches:
         weight_names = ['Weight_XS']
         weights, _ = self._get_branches(structured_array, weight_names)
         weights = np.prod(weights, axis=1).reshape(-1,1)
-        weights /+ np.sum(weights)
+        weights /= np.sum(weights)
 
         # i = np.random.randint(0,1000)
         # with open(self.save_path + '/weights_{}.txt'.format(i), 'w') as f:
