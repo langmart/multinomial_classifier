@@ -1,20 +1,22 @@
 # written by Martin Lang.
 import numpy as np
 import datetime
-from onehot_mlp import OneHotMLP
+from ttH_classifier import OneHotMLP
 from data_frame import DataFrame
 
 
-trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01_light_weights0.npy'
-valpath='/storage/7/lang/nn_data/converted/odd_branches_corrected_30_20_10_01_light_weights0.npy'
+trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01_light_weights4.npy'
+valpath='/storage/7/lang/nn_data/converted/odd_branches_corrected_30_20_10_01_light_weights4.npy'
 weight_path = '/storage/7/lang/nn_data/converted/weights.txt'
 branchlist='branchlists/branches_corrected_converted.txt'
-exec_name = 'train'
-with open(weight_path, 'r') as f:
-    weights = [line.strip() for line in f]
-    sig_weight = np.float32(weights[0])
-    bg_weight = np.float32(weights[1])
-outpath = 'data/executed/training/'
+exec_name = 'ttH_test'
+sig_weight = 85.4 / 143639
+bg_weight = 244100.0 / 714432
+# with open(weight_path, 'r') as f:
+#     weights = [line.strip() for line in f]
+#     sig_weight = np.float32(weights[0])
+#     bg_weight = np.float32(weights[1])
+outpath = 'data/executed/analyses_ttH/test/'
 print('Loading data...')
 train = np.load(trainpath)
 val = np.load(valpath)
@@ -23,14 +25,14 @@ labels = ['ttH', 'tt+bb', 'tt+2b', 'tt+b', 'tt+cc', 'tt+light']
 model_location = outpath + exec_name
 
 # For information on some of the following options see below.
-optname = 'Momentum'
+optname = 'Adam'
 optimizer_options = []
 act_func = 'elu'
 N_EPOCHS = 1000
-batch_size = 400
+batch_size = 1000
 learning_rate = 5e-3
 keep_prob = 0.7
-beta = 1e-8
+beta = 100
 outsize = 6
 enable_early='yes'
 early_stop = 15
@@ -39,8 +41,10 @@ lrate_decay_options = []
 batch_decay = 'no'
 batch_decay_options = []
 
-hidden_layers = [200, 200, 200, 200, 200]
+hidden_layers = [200, 200, 200, 200]
 normalization = 'gaussian'
+ttH_penalty = 0.0
+
 
 # Be careful when editing the part below.
 train = DataFrame(train, out_size=outsize, normalization=normalization)
@@ -48,14 +52,14 @@ val = DataFrame(val, out_size=outsize, normalization=normalization)
 
 cl = OneHotMLP(train.nfeatures, hidden_layers, outsize, model_location, 
         labels_text=labels, branchlist=branchlist, sig_weight=sig_weight,
-        bg_weight=bg_weight, act_func=act_func)
+        bg_weight=bg_weight)
 cl.train(train, val, optimizer=optname, epochs=N_EPOCHS, batch_size=batch_size, 
         learning_rate=learning_rate, keep_prob=keep_prob, beta=beta, 
-        out_size=outsize, optimizer_options=optimizer_options,
-        enable_early=enable_early, early_stop=early_stop,
+        out_size=outsize, optimizer_options=optimizer_options, 
         decay_learning_rate=decay_learning_rate,
         dlrate_options=lrate_decay_options, batch_decay=batch_decay,
-        batch_decay_options=batch_decay_options)
+        batch_decay_options=batch_decay_options, enable_early=enable_early,
+        early_stop=early_stop, ttH_penalty=ttH_penalty)
 with open('{}/data_info.txt'.format(model_location), 'w') as out:
     out.write('Training data: {}\n'.format(trainpath))
     out.write('Validation data: {}\n'.format(valpath))
