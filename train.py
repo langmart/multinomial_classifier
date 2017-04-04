@@ -1,8 +1,8 @@
 # written by Martin Lang.
 import numpy as np
 import datetime
-from onehot_mlp import OneHotMLP
-from data_frame import DataFrame
+from MLP.onehot_mlp import OneHotMLP
+from MLP.data_frame import DataFrame
 
 
 trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01_light_weights0.npy'
@@ -27,7 +27,7 @@ optname = 'Momentum'
 optimizer_options = []
 act_func = 'elu'
 N_EPOCHS = 1000
-batch_size = 400
+batch_size = 1000
 learning_rate = 5e-3
 keep_prob = 0.7
 beta = 1e-8
@@ -39,7 +39,7 @@ lrate_decay_options = []
 batch_decay = 'no'
 batch_decay_options = []
 
-hidden_layers = [200, 200, 200, 200, 200]
+hidden_layers = [200, 200, 200, 200]
 normalization = 'gaussian'
 
 # Be careful when editing the part below.
