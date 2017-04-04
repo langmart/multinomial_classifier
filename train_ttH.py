@@ -2,7 +2,7 @@
 import numpy as np
 import datetime
 from MLP.ttH_classifier import OneHotMLP
-from MLP.data_frame import DataFrame
+from DataFrame.data_frame import DataFrame
 
 
 trainpath='/storage/7/lang/nn_data/converted/even_branches_corrected_30_20_10_01_light_weights5.npy'
