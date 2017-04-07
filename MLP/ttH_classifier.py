@@ -274,7 +274,7 @@ class OneHotMLP:
         
         # Non-static memory management; memory can be allocated on the fly.
         sess_config = tf.ConfigProto()
-        sess_config.gpu_options.per_process_gpu_memory_fraction = 0.3
+        sess_config.gpu_options.per_process_gpu_memory_fraction = 0.28
         # sess_config.gpu_options.allow_growth = True
         
         with tf.Session(config=sess_config, graph=train_graph) as sess:
@@ -296,7 +296,7 @@ class OneHotMLP:
 
             train_data.normalize()
             val_data.normalize()
-            early_stopping = {'val_purity': 0.0, 'val_significance': 0.0, 'epoch': 0}
+            early_stopping = {'val_purity': -1.0, 'val_significance': 1.0, 'epoch': 0}
 
             print(130*'-')
             print('Train model: {}'.format(self.model_loc))
